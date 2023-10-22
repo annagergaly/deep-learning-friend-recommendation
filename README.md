@@ -15,13 +15,13 @@ The goal of this project is to develop a personalized friend recommendation syst
 
 ## Functions of the files in the repository
 
-- ** Dockerfile **  
+- **Dockerfile**  
 The initial version of the dockerfile for containerization
-- ** Friend_recommendation.ipynb **  
+- **Friend_recommendation.ipynb**  
 The main ipython notebook containing the code for data acquisition, analysis and preparation
-- ** requirements.txt **  
+- **requirements.txt**  
 The list of necessary python packages
-- ** twitter_featurenames_clusters **  
+- **twitter_featurenames_clusters**  
 Saved artifact of a word clustering used for data preparation. The project can be run without it present but it greatly speeds up the process when present
 
 ## Related works
