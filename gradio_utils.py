@@ -126,7 +126,7 @@ def main():
                  ["models/twitter_dataset_diff/best.pt", "samples/twitter_dataset_diff_sample.json", 7],
                  ["models/twitter_dataset_cluster/best.pt", "samples/twitter_dataset_cluster_sample.json", 7]
              ],
-             title="Friend recommendation").launch(share=False, debug=False)
+             title="Friend recommendation").launch(share=False, debug=False, server_name="0.0.0.0")
     
 if __name__=="__main__":
     main()

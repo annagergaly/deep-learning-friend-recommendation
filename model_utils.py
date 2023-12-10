@@ -3,6 +3,7 @@ import torch_geometric
 import numpy as np
 import wandb
 import os
+from models import GCN
 
 def train_epoch(model, train_data, optimizer, loss_fct):
     loss_acc = 0
@@ -87,19 +88,20 @@ def train_model(model, train_data, val_data, epochs, epoch_counter, patience, mo
             f'Val loss: {metrics["val/val_loss"]:.4f}, Val acc {metrics["val/val_accuracy"]:.2%}')
 			
 def predict(model, graph):
+    model.eval()
     with torch.no_grad():
         z = model.node_encoding(graph.x, graph.edge_index)
         out = model.classifier(z, graph.edge_label_index).view(-1)
     return out
     
 def preds_from_model(model, test_data):
-  y_preds = []
-  for graph in test_data:
-    y_preds.append(predict(model, graph))
+    y_preds = []
+    for graph in test_data:
+        y_preds.append(predict(model, graph))
 
-  y_preds = torch.cat(y_preds).cpu().numpy()
+    y_preds = torch.cat(y_preds).cpu().numpy()
 
-  return y_preds
+    return y_preds
 	
 def test(model, test_data):
     model.eval()
@@ -107,3 +109,16 @@ def test(model, test_data):
     for graph in test_data:
         out.append(predict(model, graph))
     return torch.cat(out)
+    
+def load_model(model_path):
+    checkpoint = torch.load(model_path, map_location=torch.device('cpu'))
+    num_layers = int(len([x for x in checkpoint["model_state_dict"].keys() if x.startswith("conv")])/2)
+    num_feat = checkpoint["model_state_dict"]["conv.0.lin.weight"].shape[1]
+    hidden_dim = checkpoint["model_state_dict"][f"conv.{num_layers-1}.lin.weight"].shape[1]
+    node_embedding_dim = checkpoint["model_state_dict"][f"conv.{num_layers-1}.lin.weight"].shape[0]
+    hidden_dim_linear = checkpoint["model_state_dict"]["layer2.weight"].shape[1]
+    
+    model = GCN(num_feat, hidden_dim, node_embedding_dim, hidden_dim_linear, num_layers, 0.5)
+    model.load_state_dict(checkpoint["model_state_dict"])
+    
+    return model

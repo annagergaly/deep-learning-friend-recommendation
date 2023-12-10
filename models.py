@@ -6,6 +6,7 @@ from torch import nn
 from torch.nn import Linear
 from sklearn.linear_model import LogisticRegression
 from tqdm import tqdm
+import numpy as np
 
 class GCN(torch.nn.Module):
     def __init__(self, num_feat, hidden_dim, node_embedding_dim, hidden_dim_linear, num_layers, dropout):
@@ -43,7 +44,13 @@ class GCN(torch.nn.Module):
         pass
 
 class Baseline():
-    def fit_predict_baseline(train_data, val_data, test_data):
+
+    def create_x_y(self, graph):
+        edges1 = torch.index_select(graph.x, 0, graph.edge_label_index[0])
+        edges2 = torch.index_select(graph.x, 0, graph.edge_label_index[1])
+        return torch.cat((edges1, edges2), 1), graph.edge_label
+
+    def fit_predict_baseline(self, train_data, val_data, test_data):
       data = []
       y = []
       for graph in train_data:
@@ -71,7 +78,7 @@ class Baseline():
       y_all = []
       y_probas_all = []
       for graph in test_data:
-        X, y = create_x_y(graph)
+        X, y = self.create_x_y(graph)
         X = X.cpu()
         y = y.cpu()
         y_probas = logreg.predict_proba(X)[:,1]
