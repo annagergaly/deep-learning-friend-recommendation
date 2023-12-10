@@ -42,7 +42,7 @@ docker build . -t dl:friend_recommendation
 ```
 To run the container:
 ```
-docker run --rm -it dl:friend_recommendation bash
+docker run --rm -it -p 7860:7860 -p 8887:8887 dl:friend_recommendation bash
 ```
 In the container run jupyter-lab to open the notebook, jupyter lab can be accessed from the host on port 8887.
 
@@ -55,3 +55,9 @@ Training and evaluation is done in the Friend_recommendation.ipynb notebook. For
 For training, to train the deep learning models use the train_model function, to train the baseline solution run train_baseline_all_graphs.
 
 For evaluation, run the Evaluation section of the notebook.
+
+To run the user interface:
+```
+python gradio_utils.py
+```
+This will start a Gradio server, and it will be accessible on the host machine on http://127.0.0.1:7860/.
