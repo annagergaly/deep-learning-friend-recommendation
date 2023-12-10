@@ -15,21 +15,21 @@ The goal of this project is to develop a personalized friend recommendation syst
 
 ## Functions of the files in the repository
 
-- **models**
+- **models** 
 Model checkpoints saved for running inference on gradio
-- **samples**
+- **samples** 
 Sample json files as examples for gradio
 - **Dockerfile** 
 The initial version of the dockerfile for containerization
 - **Friend_recommendation.ipynb**  
 The main ipython notebook containing the code for data acquisition, analysis and preparation, using our other code split into separate python files. (The notebook was mainly used and tested on Google Colab.)
-- **dataset_utils.py**
+- **dataset_utils.py** 
 Utility python code concerning dataset loading. It contains the SNAPEgoDataset class, which handles downloading and preprocessing.
-- **gradio_utils.py**
+- **gradio_utils.py** 
 Utility python code enabling gradio integration for user interface.
-- **model_utils.py**
+- **model_utils.py** 
 Utility functions for training, validating and running inference on models.
-- **models.py**
+- **models.py** 
 File containing the code for our model and the baseline.
 - **requirements.txt**  
 The list of necessary python packages.
