@@ -109,17 +109,24 @@ def read_graph(model_path, file, person):
   
 def main():
 
-    models = [f for f in os.listdir("models")]
-    model_paths = [os.path.join("models", f, "best.pt") for f in models]
-        
+    models = [(f, os.path.join("models", f, "best.pt")) for f in os.listdir("models") if not f.startswith(".")]
+
     dropdown = gr.Dropdown(
-            choices = models, value=model_paths, label="Model"
+            choices = models
         )
 
     gr.Interface(fn=read_graph,
              inputs=[dropdown, "file", "number"],
              outputs=["image", "text"],
-             title="Friend recommendation").launch(share=True)
+             examples=[
+                 ["models/facebook_dataset_basic/best.pt", "samples/facebook_dataset_basic_sample.json", 5],
+                 ["models/facebook_dataset_diff/best.pt", "samples/facebook_dataset_diff_sample.json", 5],
+                 ["models/facebook_dataset_pca/best.pt", "samples/facebook_dataset_pca_sample.json", 5],
+                 ["models/gplus_dataset_diff/best.pt", "samples/gplus_dataset_diff_sample.json", 15],
+                 ["models/twitter_dataset_diff/best.pt", "samples/twitter_dataset_diff_sample.json", 7],
+                 ["models/twitter_dataset_cluster/best.pt", "samples/twitter_dataset_cluster_sample.json", 7]
+             ],
+             title="Friend recommendation").launch(share=False, debug=False)
     
 if __name__=="__main__":
     main()
