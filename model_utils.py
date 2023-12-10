@@ -6,6 +6,7 @@ import os
 from models import GCN
 
 def train_epoch(model, train_data, optimizer, loss_fct):
+    #Train model on an apoch
     loss_acc = 0
     acc_nom = 0
     acc_den = 0
@@ -15,6 +16,7 @@ def train_epoch(model, train_data, optimizer, loss_fct):
         z = model.node_encoding(graph.x, graph.edge_index)
         out = model.classifier(z, graph.edge_label_index).view(-1)
         loss = loss_fct(out, graph.edge_label)
+        #Refresh weights after each graph
         loss.backward()
 
         optimizer.step()
@@ -31,6 +33,7 @@ def train_epoch(model, train_data, optimizer, loss_fct):
 	
 
 def validation(model, val_data, loss_fct):
+    #Run validation
     loss_acc = 0
     acc_nom = 0
     acc_den = 0
@@ -47,6 +50,7 @@ def validation(model, val_data, loss_fct):
     return {"val/val_loss": loss_acc, "val/val_accuracy": acc}
 	
 def train_model(model, train_data, val_data, epochs, epoch_counter, patience, model_name, log):
+    #Train the model with early stopping
     model.train()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.01, weight_decay=5e-4)
     loss_fct = torch.nn.BCEWithLogitsLoss()

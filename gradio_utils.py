@@ -15,7 +15,7 @@ from models import GCN
 
 
 def read_graph_from_json(file):
-    #Reads a graph from a json file
+    #Reads a graph from a json file into EgoData format
     with open(file, "rt") as f:
         nodes = json.load(f)["nodes"]
     ids = [node["id"] for node in nodes]
@@ -56,7 +56,9 @@ def get_friends(model, graph, person_index):
     return neighbor_candidates[torch.topk(out, 3)[1]].tolist()
   
 def load_model(model_path):
+    #Load a model from a model checkpoint
     checkpoint = torch.load(model_path, map_location=torch.device('cpu'))
+    #Extract hyperparameters from the saved weights
     num_layers = int(len([x for x in checkpoint["model_state_dict"].keys() if x.startswith("conv")])/2)
     num_feat = checkpoint["model_state_dict"]["conv.0.lin.weight"].shape[1]
     hidden_dim = checkpoint["model_state_dict"][f"conv.{num_layers-1}.lin.weight"].shape[1]
@@ -70,6 +72,7 @@ def load_model(model_path):
     
   
 def read_graph(model_path, file, person):
+    #Read model
     model = load_model(model_path)
    
     if file.endswith(".json"):
@@ -77,6 +80,7 @@ def read_graph(model_path, file, person):
 
     index2id = {index:id for id, index in id2index.items()}
 
+    #Highlight the person for whom the friends are recommended
     highlight = []
 
     if type(person) == str:
@@ -87,8 +91,10 @@ def read_graph(model_path, file, person):
 
     person_index = highlight[0]
 
+    #Recommend friends
     friends = get_friends(model, graph, person_index)
 
+    #Draw graph
     plt.figure()
     G = to_networkx(graph, to_undirected=False)
     pos = nx.spring_layout(G, iterations=50, k=0.4, seed=175)
@@ -119,7 +125,6 @@ def main():
              inputs=[dropdown, "file", "number"],
              outputs=["image", "text"],
              examples=[
-                 ["models/facebook_dataset_basic/best.pt", "samples/facebook_dataset_basic_sample.json", 5],
                  ["models/facebook_dataset_diff/best.pt", "samples/facebook_dataset_diff_sample.json", 5],
                  ["models/facebook_dataset_pca/best.pt", "samples/facebook_dataset_pca_sample.json", 5],
                  ["models/gplus_dataset_diff/best.pt", "samples/gplus_dataset_diff_sample.json", 15],
