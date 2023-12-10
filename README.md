@@ -16,11 +16,13 @@ The goal of this project is to develop a personalized friend recommendation syst
 ## Functions of the files in the repository
 
 - **models**  
-Model checkpoints saved for running inference on gradio
+Model checkpoints saved for running inference on gradio.
 - **samples**  
-Sample json files as examples for gradio
+Sample json files as examples for gradio.
 - **Dockerfile**  
-The initial version of the dockerfile for containerization
+The initial version of the dockerfile for containerization.
+- **documentation.pdf**  
+The documentation of the project.
 - **Friend_recommendation.ipynb**  
 The main ipython notebook containing the code for data acquisition, analysis and preparation, using our other code split into separate python files. (The notebook was mainly used and tested on Google Colab.)
 - **dataset_utils.py**  
