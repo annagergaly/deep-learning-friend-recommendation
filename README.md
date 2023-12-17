@@ -21,6 +21,8 @@ Model checkpoints saved for running inference on gradio.
 Sample json files as examples for gradio.
 - **Dockerfile**  
 The initial version of the dockerfile for containerization.
+- **Friend recommendation with graph neural networks.pptx**  
+The presentation prepared for the exam.
 - **documentation.pdf**  
 The documentation of the project.
 - **Friend_recommendation.ipynb**  
